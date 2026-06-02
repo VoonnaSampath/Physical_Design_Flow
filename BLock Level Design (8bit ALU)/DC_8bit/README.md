@@ -298,4 +298,3 @@ Before closing the run documentation, confirm that:
 - `reports/report-power.txt` was generated.
 - `reports/report-qor.txt` was generated.
 - `reports/report-threshold.txt` was generated.
-
