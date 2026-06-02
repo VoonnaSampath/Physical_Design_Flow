@@ -47,6 +47,7 @@ DC_8bit/
 ├── results/
 ├── reports/
 └── Reports/
+    ├── images of reports (.png)
 
 ../rtl/
 └── alu_8bit.v
