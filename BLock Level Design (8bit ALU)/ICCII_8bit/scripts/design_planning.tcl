@@ -9,13 +9,11 @@ create_lib -ref_lib "$PDK_PATH/SAED14nm_EDK_STD_RVT/ndm/saed14rvt_base_frame_tim
     $PDK_PATH/SAED14nm_EDK_STD_LVT/ndm/saed14lvt_base_frame_timing.ndm 
     $PDK_PATH/SAED14nm_EDK_STD_HVT/ndm/saed14hvt_base_frame_timing.ndm" ALU_8bit_14_LIB
 
-read_verilog {./../DC_8bit/results/alu_8bit.mapped.v } -library ALU_8bit_14_LIB -design main -top alu_8bit
-
-set PDK /data/pdk/pdk14nm/SAED14nm_EDK_03_2025
-
 set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_RVT/ndm/saed14rvt_cg_frame_timing.ndm
 set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_LVT/ndm/saed14lvt_cg_frame_timing.ndm
 set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_HVT/ndm/saed14hvt_cg_frame_timing.ndm
+
+read_verilog {./../DC_8bit/results/alu_8bit.mapped.v } -library ALU_8bit_14_LIB -design main -top alu_8bit
 
 save_lib
 save_block

@@ -41,18 +41,18 @@ BLock Level Design (8bit ALU)/
     └── Reports/
 ```
 
-Note: `VCS_8bit/`, `VERDI_8bit/`, and `ICCII_8bit/README.md` are included here as expected documentation locations. Add or update these folders as the flow grows.
+Note: `VCS_8bit/` and `VERDI_8bit/` are included here as expected future work locations. Add or update these folders as the flow grows.
 
 ## Folder Contents
 
 | Folder | Contents | README |
 | --- | --- | --- |
-| [`rtl/`](rtl/) | RTL source and testbench files for the 8-bit ALU. Current files include `alu_8bit.v` and `tb_alu_8bit.v`. | Add `rtl/README.md` if detailed RTL documentation is needed. |
-| [`CONSTRAINTS/`](CONSTRAINTS/) | Synopsys Design Constraints for the block. Current file: `alu_8bit.sdc`. | Add `CONSTRAINTS/README.md` if constraint documentation is needed. |
+| [`rtl/`](rtl/) | RTL source and testbench files for the 8-bit ALU. Current files include `alu_8bit.v` and `tb_alu_8bit.v`. | Add `rtl/README.md` if RTL notes are needed later. |
+| [`CONSTRAINTS/`](CONSTRAINTS/) | Synopsys Design Constraints for the block. Current file: `alu_8bit.sdc`. | Add `CONSTRAINTS/README.md` if constraint notes are needed later. |
 | `VCS_8bit/` | Planned VCS simulation flow directory for compiling and running the ALU testbench. | Planned: `VCS_8bit/README.md`. |
 | `VERDI_8bit/` | Planned Verdi debug flow directory for waveform viewing and simulation debug. | Planned: `VERDI_8bit/README.md`. |
-| [`DC_8bit/`](DC_8bit/) | Design Compiler synthesis flow, setup files, generated reports, and synthesis documentation. | [`DC_8bit/README.md`](DC_8bit/README.md) |
-| [`ICCII_8bit/`](ICCII_8bit/) | ICC2 physical implementation scripts and report directory for design planning, placement, CTS, routing, and report extraction. | Add `ICCII_8bit/README.md` when the ICC2 flow documentation is prepared. |
+| [`DC_8bit/`](DC_8bit/) | Design Compiler synthesis flow, setup files, generated reports, and synthesis work record. | [`DC_8bit/README.md`](DC_8bit/README.md) |
+| [`ICCII_8bit/`](ICCII_8bit/) | ICC2 physical implementation scripts and report directory for design planning, placement, CTS, routing, and report extraction. | [`ICCII_8bit/README.md`](ICCII_8bit/README.md) |
 
 ## VCS Simulation Flow
 
@@ -131,7 +131,7 @@ VERDI_8bit/README.md
 
 ## Design Compiler Synthesis Flow
 
-The Design Compiler synthesis flow is documented in:
+The Design Compiler synthesis work is recorded in:
 
 ```text
 DC_8bit/README.md
@@ -150,7 +150,7 @@ CONSTRAINTS/alu_8bit.sdc
 rtl/alu_8bit.v
 ```
 
-Documentation link:
+README link:
 
 ```text
 DC_8bit/README.md
@@ -177,7 +177,7 @@ ICCII_8bit/scripts/routing.tcl
 ICCII_8bit/scripts/extracting_reports.tcl
 ```
 
-When the ICC2 README is added, place the detailed flow documentation in:
+The ICC2 physical implementation work is recorded in:
 
 ```text
 ICCII_8bit/README.md
