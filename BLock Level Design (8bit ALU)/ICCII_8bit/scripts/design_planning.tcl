@@ -20,7 +20,10 @@ set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_HVT/ndm/saed14hvt_cg_frame_timing
 save_lib
 save_block
 
+###############################################################################################################
 save_block -as pre_floorplan_block
+###############################################################################################################
+
 ###############################################################################################################
 # Floor Planning Script for 8-bit ALU
 # open pre_floorplan_block
@@ -116,6 +119,8 @@ compile_pg -strategies rail_strat
 
 check_pg_drc
 
+check_pg_missing_vias
+
 check_pg_connectivity
 
 ###############################################################################################################
@@ -130,4 +135,18 @@ check_legality -verbose
 
 ###############################################################################################################
 save_block -as powerplan_block
+###############################################################################################################
+
+###############################################################################################################
+# After floorplanning, it's important to check the design's pin placement and overall floorplan quality to ensure 
+# that it meets the design requirements before proceeding to power planning and placement.
+# The following commands will report the pin placement, utilization, and design metrics to help you identify 
+# any potential issues that need to be addressed before moving on to power planning and placement.
+###############################################################################################################
+
+report_utilization > utilization_report_after_powerplanning.txt
+#report_cell_density > cell_density_report_after_powerplanning.txt
+#report_pin_utilization > pin_utilization_report_after_powerplanning.txt
+report_design > design_report_after_powerplanning.txt
+
 ###############################################################################################################
