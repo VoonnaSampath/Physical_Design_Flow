@@ -11,6 +11,7 @@ The goal of this README is to show the project flow in a way that someone else c
 - [Step 1: RTL Design](#step-1-rtl-design)
 - [Step 2: VCS Simulation](#step-2-vcs-simulation)
 - [Step 3: Verdi Debug](#step-3-verdi-debug)
+- [Step 3.5: SDC Timing Constraints](#step-35-sdc-timing-constraints)
 - [Step 4: Design Compiler Synthesis](#step-4-design-compiler-synthesis)
 - [Step 5: ICC2 Physical Implementation](#step-5-icc2-physical-implementation)
 - [Step 6: Final GDS Handoff](#step-6-final-gds-handoff)
@@ -166,6 +167,48 @@ After opening the waveform in Verdi, the GUI screenshots here:
 #### Schematic view of the Testbench module in Verdi
 
 ![Verdi ALU schematic](VCS_and_Verdi/Images/verdi_alu_schematic.png)
+
+## Step 3.5: SDC Timing Constraints
+
+After verifying the RTL functionality in Verdi, I prepared the SDC timing constraints used for synthesis and physical implementation.
+
+Constraint file:
+
+```text
+CONSTRAINTS/alu_8bit.sdc
+```
+
+The SDC file defines the timing environment for the design and is used throughout the Design Compiler and ICC2 flow.
+
+Main constraints included in the SDC:
+
+- Clock definition using `create_clock`
+- Virtual clock definition for IO timing reference
+- Clock uncertainty constraints
+- Clock transition constraints
+- Input delay constraints
+- Output delay constraints
+- Driving cell constraints for input ports
+- Output load constraints
+- False path constraints for reset signals
+- Clock group and timing environment setup
+
+Purpose of the virtual clock:
+
+- The virtual clock is used as a reference for external input and output timing.
+- It helps define realistic IO timing behavior even though the external clock is not physically connected inside the design.
+- It is mainly used for proper setup and hold analysis on input and output paths.
+
+The SDC constraints guide:
+
+- RTL synthesis optimization
+- Timing analysis
+- Placement optimization
+- Clock tree synthesis (CTS)
+- Routing optimization
+- Final signoff timing checks
+
+These constraints ensure that the design is optimized and analyzed under a consistent timing environment across the complete RTL-to-GDS flow.
 
 ## Step 4: Design Compiler Synthesis
 
