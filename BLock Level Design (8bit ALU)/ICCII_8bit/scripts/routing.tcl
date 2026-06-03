@@ -75,8 +75,7 @@ check_lvs
 report_timing -delay_type max -type full -verbose > timing_report_setup_after_routing.txt
 report_timing -delay_type min -type full -verbose > timing_report_hold_after_routing.txt
 report_power > power_report_after_routing.txt
-#report_routing > routing_report.txt
-report_congestion -rerunglobal > congestion_report_after_routing.txt
+report_congestion -rerun_global_router > congestion_report_after_routing.txt
 
 ###############################################################################################################
 # Incremental Routing to fix any remaining DRCs after the initial routing pass, followed by metal fill and final DRC check.

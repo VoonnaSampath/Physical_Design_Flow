@@ -70,8 +70,7 @@ set_propagated_clock clk
 ###############################################################################################################
 
 check_timing -type full -verbose
-report_clock_tree > cts_report.txt
-report_clock_tree_qor > cts_qor_report.txt
+report_clock_qor > cts_qor_report.txt
 report_timing -delay_type max -type full -verbose > timing_report_setup_after_cts.txt
 report_timing -delay_type min -type full -verbose > timing_report_hold_after_cts.txt
 

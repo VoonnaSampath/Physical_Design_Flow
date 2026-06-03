@@ -60,13 +60,11 @@ check_legality -verbose
 # These reports will help you understand if there are any local congestion hotspots or timing violations that need to be addressed before proceeding to the next steps.
 ###############################################################################################################
 
-report_congestion -rerunglobal > congestion_report_after_placement.txt
+report_congestion -rerun_global_router > congestion_report_after_placement.txt
 report_timing -delay_type max -type full -verbose > timing_report_setup_after_placement.txt
 report_timing -delay_type min -type full -verbose > timing_report_hold_after_placement.txt
 report_utilization > utilization_report_after_placement.txt
-#report_cell_density > cell_density_report_after_placement.txt
-#report_pin_density > pin_density_report_after_placement.txt
-#report_placement > placement_report.txt
+report_placement > placement_report.txt
 report_power > power_report_after_placement.txt
 
 ###############################################################################################################

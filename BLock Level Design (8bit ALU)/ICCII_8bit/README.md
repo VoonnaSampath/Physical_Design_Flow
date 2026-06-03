@@ -24,7 +24,6 @@ The flow starts from the synthesized Design Compiler netlist:
 - [Routing and Signoff Checks](#routing-and-signoff-checks)
 - [Final Extraction and Handoff Outputs](#final-extraction-and-handoff-outputs)
 - [Stage Evidence Tracking](#stage-evidence-tracking)
-- [Screenshot Naming Convention](#screenshot-naming-convention)
 - [Work Completion Checklist](#work-completion-checklist)
 
 ## Work Overview
@@ -165,6 +164,8 @@ report_utilization > utilization_report_after_floorplanning.txt
 #### Post Floorplan in GUI
 
 ![floorplan-cli](Reports/floorplan-cli.png)
+
+Floorplan with Core + Die area and with its utilization
 ![post-floorplan](Reports/post-floorplan.png)
 ![utilization](Reports/utilization-after-floorplan.png)
 
@@ -326,19 +327,9 @@ report_power > power_report_after_placement.txt
 save_block -as placement_block
 ```
 
-Captured after this stage:
+### Post Placement in GUI
 
-| Captured | What to show |
-| --- | --- |
-| `screenshots/04_placement/01_pre_placement_check.png` | Result of `check_design -checks pre_placement_stage`. |
-| `screenshots/04_placement/02_after_place_opt.png` | Cell placement after `place_opt`. |
-| `screenshots/04_placement/03_tie_cells.png` | Tie cells after `add_tie_cells`. |
-| `screenshots/04_placement/04_legality.png` | Result of `check_legality -verbose`. |
-| `Reports/placement_congestion.png` | `congestion_report_after_placement.txt`. |
-| `Reports/placement_setup_timing.png` | `timing_report_setup_after_placement.txt`. |
-| `Reports/placement_hold_timing.png` | `timing_report_hold_after_placement.txt`. |
-| `Reports/placement_utilization.png` | `utilization_report_after_placement.txt`. |
-| `Reports/placement_power.png` | `power_report_after_placement.txt`. |
+![post_placement](Reports/post-placement.png)
 
 Reports generated:
 
@@ -350,6 +341,22 @@ timing_report_hold_after_placement.txt
 utilization_report_after_placement.txt
 power_report_after_placement.txt
 ```
+
+Congestion Reports
+
+![congestion_report_after_placement](Reports/congestion_report_after_placement.png)
+
+congestion Hot Map and Histogram
+
+<img src="Reports/congestion-hotspot.png" width="45%"> <img src="Reports/congestion-histogram.png" width="45%">
+
+### Post Placement Timing Report
+
+Setup slack
+![post-placement-setup](Reports/post-placement-setup.png)
+
+Hold Slack
+![post-placement-hold](Reports/post-placement-hold.png)
 
 ## Clock Tree Synthesis
 
@@ -401,26 +408,37 @@ report_timing -delay_type min -type full -verbose > timing_report_hold_after_cts
 save_block -as cts_block
 ```
 
-Captured after this stage:
+### Pre CTS in GUI
 
-| Captured | What to show |
-| --- | --- |
-| `screenshots/05_cts/01_scenarios.png` | Active scenarios before CTS. |
-| `screenshots/05_cts/02_clock_tree_after_clock_opt.png` | Clock tree after `clock_opt`. |
-| `screenshots/05_cts/03_propagated_clock.png` | Clock shown as propagated after `set_propagated_clock clk`. |
-| `Reports/cts_clock_tree.png` | `cts_report.txt`. |
-| `Reports/cts_qor.png` | `cts_qor_report.txt`. |
-| `Reports/cts_setup_timing.png` | `timing_report_setup_after_cts.txt`. |
-| `Reports/cts_hold_timing.png` | `timing_report_hold_after_cts.txt`. |
+Clock Buffer Levels
+
+![pre-cts-buffers-tree](Reports/pre-cts-buffers-tree.png)
+
+### Post CTS in GUI
+
+Clock Tree
+
+![cts-tree](Reports/cts-tree.png)
+
+Clock Buffer Levels
+
+![post-cts-buffers-tree](Reports/post-cts-buffers-tree.png)
 
 Reports generated:
 
 ```text
-cts_report.txt
 cts_qor_report.txt
 timing_report_setup_after_cts.txt
 timing_report_hold_after_cts.txt
 ```
+
+### Post CTS Timing Report
+
+Setup slack
+![post-cts-setup](Reports/post-cts-setup.png)
+
+Hold Slack
+![post-cts-hold](Reports/post-cts-hold.png)
 
 ## Routing and Signoff Checks
 
@@ -473,24 +491,9 @@ save_block -as routed_block
 save_block -as alu_8bit
 ```
 
-Captured after this stage:
+### Post Rouitng in GUI
 
-| Captured | What to show |
-| --- | --- |
-| `screenshots/06_routing/01_global_route.png` | Routing after `route_global`. |
-| `screenshots/06_routing/02_track_assignment.png` | Routing after `route_track`. |
-| `screenshots/06_routing/03_detail_route.png` | Routed wires after `route_detail`. |
-| `screenshots/06_routing/04_route_opt.png` | Layout after `route_opt`. |
-| `screenshots/06_routing/05_check_routes.png` | `check_routes` result. |
-| `screenshots/06_routing/06_check_lvs.png` | `check_lvs` result. |
-| `screenshots/07_signoff/01_fillers.png` | Standard-cell fillers after `create_stdcell_filler`. |
-| `screenshots/07_signoff/02_drc_before_fill.png` | DRC result before metal fill. |
-| `screenshots/07_signoff/03_metal_fill.png` | Layout after `signoff_create_metal_fill`. |
-| `screenshots/07_signoff/04_drc_after_fill.png` | Final DRC result after metal fill. |
-| `Reports/routing_setup_timing.png` | `timing_report_setup_after_routing.txt`. |
-| `Reports/routing_hold_timing.png` | `timing_report_hold_after_routing.txt`. |
-| `Reports/routing_power.png` | `power_report_after_routing.txt`. |
-| `Reports/routing_congestion.png` | `congestion_report_after_routing.txt`. |
+![post-rouitng](Reports/post-routing.png)
 
 Reports generated:
 
@@ -500,13 +503,48 @@ timing_report_setup_after_routing.txt
 timing_report_hold_after_routing.txt
 power_report_after_routing.txt
 congestion_report_after_routing.txt
-incremental_routing.log
-incremental_routing_opt.log
+#incremental_routing.log
+#incremental_routing_opt.log
 drc_signoff/
 drc_after_fill/
 ```
 
+### Post Routing Timing Report
+
+After std cell filler
+![routing-after-stdcell-filler](Reports/routing-after-stdcell-filler.png)
+
+Setup slack
+![post-routing-setup](Reports/post-routing-setup.png)
+
+Hold Slack
+![post-routing-hold](Reports/post-routing-hold.png)
+
+Congestion after Routing
+
+![congestion-after-rouitng](Reports/congestion-after-rouitng.png)
+
+congestion Hot Map and Histogram
+
+<img src="Reports/congestion-hotspot-routing.png" width="45%"> <img src="Reports/congestion-histogram-routing.png" width="45%">
+
 Note: The script currently uses `route_detail -inceremental true`. Verify this option spelling in your ICC2 version before running the incremental routing step.
+
+#### Sign off DRC and Metal Fill
+
+```tcl
+check_routes
+check_lvs
+```
+
+check_routes
+![check_routes](Reports/check_routes.png)
+
+check_lvs
+![check_lvs](Reports/check_lvs.png)
+
+After Metal Fill
+![DRC-after-fill](Reports/DRC-after-fill.png)
 
 ## Final Extraction and Handoff Outputs
 
@@ -552,14 +590,6 @@ save_block
 save_lib
 ```
 
-Captured after this stage:
-
-| Captured | What to show |
-| --- | --- |
-| `screenshots/08_outputs/01_outputs_directory.png` | `outputs/` directory containing SPEF, SDF, Verilog, DEF, LEF, and GDS files. |
-| `screenshots/08_outputs/02_final_block.png` | Final `alu_8bit` block opened in ICC2. |
-| `screenshots/08_outputs/03_abstract_frame.png` | Frame or abstract view after `create_frame` and `create_abstract`. |
-
 Expected outputs:
 
 ```text
@@ -589,57 +619,6 @@ Use this table to organize the evidence for each physical implementation stage.
 | Signoff fill/DRC | Routed design before filler and metal fill | Filler inserted, metal fill created, final DRC completed | `drc_signoff/`, `drc_after_fill/`, legality screenshots |
 | Extraction | Final routed `alu_8bit` block | SPEF, SDF, Verilog, DEF, LEF, GDS, frame, and abstract created | `outputs/` directory screenshot |
 
-For utilization, timing, area/design, and power comparison across stages, keep the stage names consistent:
-
-```text
-floorplan
-powerplan
-placement
-cts
-routing
-signoff
-```
-
-Suggested report naming:
-
-```text
-Reports/<stage>_utilization.png
-Reports/<stage>_setup_timing.png
-Reports/<stage>_hold_timing.png
-Reports/<stage>_design_or_area.png
-Reports/<stage>_power.png
-Reports/<stage>_congestion.png
-Reports/<stage>_drc_lvs.png
-```
-
-## Screenshot Naming Convention
-
-Use numbered filenames so the screenshots match the command sequence.
-
-Suggested format:
-
-```text
-NN_command_or_checkpoint.png
-```
-
-Examples:
-
-```text
-screenshots/02_floorplan/04_floorplan_boundary.png
-screenshots/03_powerplan/02_power_ring.png
-screenshots/04_placement/02_after_place_opt.png
-screenshots/05_cts/02_clock_tree_after_clock_opt.png
-screenshots/06_routing/03_detail_route.png
-screenshots/07_signoff/04_drc_after_fill.png
-```
-
-Each screenshot should show one clear GUI state, such as:
-
-- Layout after a command changes geometry.
-- Report window after a report command completes.
-- Console output after a check command reports pass/fail status.
-- Block browser showing the current saved checkpoint.
-
 ## Work Completion Checklist
 
 Before considering this ICC2 work complete, confirm that:
@@ -667,4 +646,4 @@ Before considering this ICC2 work complete, confirm that:
 - Signoff DRC before and after fill was captured.
 - `routed_block` and `alu_8bit` were saved.
 - Final SPEF, SDF, Verilog, DEF, LEF, and GDS files were generated.
-- GUI screenshots are stored using the stage-based naming convention.
+- GUI screenshots are stored.
