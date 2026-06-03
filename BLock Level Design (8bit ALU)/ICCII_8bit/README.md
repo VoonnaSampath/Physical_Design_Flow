@@ -23,7 +23,7 @@ The flow starts from the synthesized Design Compiler netlist:
 - [Clock Tree Synthesis](#clock-tree-synthesis)
 - [Routing and Signoff Checks](#routing-and-signoff-checks)
 - [Final Extraction and Handoff Outputs](#final-extraction-and-handoff-outputs)
-- [Stage Evidence Tracking](#stage-evidence-tracking)
+- [Reports As per Stages](#reports-as-per-stages)
 - [Work Completion Checklist](#work-completion-checklist)
 
 ## Work Overview
@@ -165,10 +165,12 @@ report_utilization > utilization_report_after_floorplanning.txt
 
 ![floorplan-cli](Reports/floorplan-cli.png)
 
-Floorplan with Core + Die area and with its utilization
+#### Floorplan with Core + Die area and with its utilization
+
 ![post-floorplan](Reports/post-floorplan.png)
 
-Utilization Report
+#### Utilization Report
+
 ![utilization](Reports/utilization-after-floorplan.png)
 
 ## Power Planning
@@ -197,6 +199,9 @@ connect_pg_net -all_blocks -automatic
 ```
 
 ![connect-pg-automatic](Reports/connect-pg-automatic.png)
+
+#### Shapes of Power & Ground Pin
+
 ![create-shapes-pg](Reports/create-shapes-pg.png)
 
 #### PG Ring
@@ -433,7 +438,7 @@ save_block -as cts_block
 
 ![cts-tree](Reports/cts-tree.png)
 
-#### Clock Buffer Levels
+#### Clock Buffer Level
 
 ![post-cts-buffers-tree](Reports/post-cts-buffers-tree.png)
 
@@ -625,20 +630,20 @@ outputs/alu_8bit_abstract.lef
 outputs/alu_8bit_final.gds
 ```
 
-## Stage Evidence Tracking
+## Reports As per Stages
 
 Use this table to organize the evidence for each physical implementation stage.
 
-| Stage | Pre-State to Capture | Post-State to Capture | Reports to Attach |
-| --- | --- | --- | --- |
-| Netlist import | Empty/new ICC2 library state | `alu_8bit` imported and saved as `pre_floorplan_block` | Console import log, library/reference-library screenshot |
-| Floorplan | Imported netlist before floorplan | Die/core boundary and placed pins | `utilization_report_after_floorplanning.txt`, `design_report_after_floorplanning.txt` |
-| Power planning | Floorplan before PG creation | PG ports, nets, ring, mesh, rails, boundary cells, tap cells | `utilization_report_after_powerplanning.txt`, `design_report_after_powerplanning.txt`, PG DRC/connectivity screenshots |
-| Placement | `powerplan_block` before placement | Legalized placed cells and tie cells | `congestion_report_after_placement.txt`, setup/hold timing after placement, utilization after placement, power after placement |
-| CTS | `placement_block` before clock tree | Clock buffers/inverters inserted and `clk` propagated | `cts_report.txt`, `cts_qor_report.txt`, setup/hold timing after CTS |
-| Routing | `cts_block` before routing | Global/detail routed design and route optimized design | Setup/hold timing after routing, power after routing, congestion after routing, DRC/LVS screenshots |
-| Signoff fill/DRC | Routed design before filler and metal fill | Filler inserted, metal fill created, final DRC completed | `drc_signoff/`, `drc_after_fill/`, legality screenshots |
-| Extraction | Final routed `alu_8bit` block | SPEF, SDF, Verilog, DEF, LEF, GDS, frame, and abstract created | `outputs/` directory screenshot |
+| Stage | Reports |
+| --- | --- |
+| Netlist import | Console import log, library/reference-library screenshot |
+| Floorplan | `utilization_report_after_floorplanning.txt`, `design_report_after_floorplanning.txt` |
+| Power planning | `utilization_report_after_powerplanning.txt`, `design_report_after_powerplanning.txt`, PG DRC/connectivity screenshots |
+| Placement | `congestion_report_after_placement.txt`, setup/hold timing after placement, utilization after placement, power after placement |
+| CTS | `cts_report.txt`, `cts_qor_report.txt`, setup/hold timing after CTS |
+| Routing | Setup/hold timing after routing, power after routing, congestion after routing, DRC/LVS screenshots |
+| Signoff fill/DRC | `drc_signoff/`, `drc_after_fill/`, legality screenshots |
+| Extraction | `outputs/` directory screenshot |
 
 ## Work Completion Checklist
 
