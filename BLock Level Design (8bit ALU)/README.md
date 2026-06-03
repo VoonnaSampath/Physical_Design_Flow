@@ -288,6 +288,3 @@ For the detailed DC and ICC2 screenshots and reports, refer to:
 
 - [`DC_8bit/README.md`](DC_8bit/README.md)
 - [`ICCII_8bit/README.md`](ICCII_8bit/README.md)
-
-
-[def]: VCS_and_Verdi/Images/vcs_simulation_result.jpg
