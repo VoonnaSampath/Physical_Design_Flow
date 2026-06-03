@@ -1,22 +1,54 @@
-# Block Level Design: 8-bit ALU
+# 8-bit ALU Block-Level RTL to GDS Flow
 
-This directory contains the block-level design files for the 8-bit ALU flow. It is organized around RTL design, simulation/debug, synthesis, constraints, and physical implementation handoff.
+This folder shows the work I did for the 8-bit ALU block, starting from RTL and moving through simulation, waveform debug, synthesis, physical implementation, and final GDS generation.
 
-This README is intended to act as the index for the block-level design folder. The folder structure will be updated as additional flow directories are added.
+The goal of this README is to show the project flow in a way that someone else can follow. I am keeping the detailed Design Compiler and ICC2 work inside their own folders, and this file acts as the main flow path from `rtl/` to final layout outputs.
 
 ## Table of Contents
 
+- [Project Flow](#project-flow)
 - [Folder Structure](#folder-structure)
-- [Folder Contents](#folder-contents)
-- [VCS Simulation Flow](#vcs-simulation-flow)
-- [Verdi Debug Flow](#verdi-debug-flow)
-- [Design Compiler Synthesis Flow](#design-compiler-synthesis-flow)
-- [ICC2 Physical Implementation Flow](#icc2-physical-implementation-flow)
-- [Update Notes](#update-notes)
+- [Step 1: RTL Design](#step-1-rtl-design)
+- [Step 2: VCS Simulation](#step-2-vcs-simulation)
+- [Step 3: Verdi Debug](#step-3-verdi-debug)
+- [Step 4: Design Compiler Synthesis](#step-4-design-compiler-synthesis)
+- [Step 5: ICC2 Physical Implementation](#step-5-icc2-physical-implementation)
+- [Step 6: Final GDS Handoff](#step-6-final-gds-handoff)
+- [Screenshots and Results](#screenshots-and-results)
+
+## Project Flow
+
+I followed this overall flow:
+
+```text
+RTL
+  |
+  v
+VCS simulation
+  |
+  v
+Verdi waveform/debug
+  |
+  v
+Design Compiler synthesis
+  |
+  v
+ICC2 floorplan, power plan, placement, CTS, routing
+  |
+  v
+Final outputs: netlist, SDF, SPEF, DEF, LEF, GDS
+```
+
+The main idea is:
+
+1. I verified the RTL.
+2. I ran simulation using VCS.
+3. I used Verdi to view waveforms and debug the ALU behavior.
+4. I synthesized the RTL using Design Compiler.
+5. I took the mapped netlist into ICC2.
+6. I completed the physical implementation flow up to final GDS generation.
 
 ## Folder Structure
-
-Current and planned block-level structure:
 
 ```text
 BLock Level Design (8bit ALU)/
@@ -26,168 +58,236 @@ BLock Level Design (8bit ALU)/
 │   └── tb_alu_8bit.v
 ├── CONSTRAINTS/
 │   └── alu_8bit.sdc
-├── VCS_8bit/
-│   └── README.md
-├── VERDI_8bit/
-│   └── README.md
 ├── DC_8bit/
 │   ├── README.md
 │   ├── run_dc.tcl
 │   ├── rm_setup/
 │   └── Reports/
-└── ICCII_8bit/
-    ├── README.md
-    ├── scripts/
-    └── Reports/
+├── ICCII_8bit/
+│   ├── README.md
+│   ├── scripts/
+│   └── Reports/
+└── Reports/
 ```
 
-Note: `VCS_8bit/` and `VERDI_8bit/` are included here as expected future work locations. Add or update these folders as the flow grows.
+| Path | What I used it for |
+| --- | --- |
+| [`rtl/`](rtl/) | RTL design and testbench for the 8-bit ALU. |
+| [`CONSTRAINTS/`](CONSTRAINTS/) | Timing and design constraints used by synthesis and physical implementation. |
+| [`DC_8bit/`](DC_8bit/) | Design Compiler synthesis work. Detailed flow is in [`DC_8bit/README.md`](DC_8bit/README.md). |
+| [`ICCII_8bit/`](ICCII_8bit/) | ICC2 physical implementation work from mapped netlist to final GDS. Detailed flow is in [`ICCII_8bit/README.md`](ICCII_8bit/README.md). |
+| `Reports/` | Place for screenshots from VCS, Verdi, and the overall project flow. |
 
-## Folder Contents
+## Step 1: RTL Design
 
-| Folder | Contents | README |
-| --- | --- | --- |
-| [`rtl/`](rtl/) | RTL source and testbench files for the 8-bit ALU. Current files include `alu_8bit.v` and `tb_alu_8bit.v`. | Add `rtl/README.md` if RTL notes are needed later. |
-| [`CONSTRAINTS/`](CONSTRAINTS/) | Synopsys Design Constraints for the block. Current file: `alu_8bit.sdc`. | Add `CONSTRAINTS/README.md` if constraint notes are needed later. |
-| `VCS_8bit/` | Planned VCS simulation flow directory for compiling and running the ALU testbench. | Planned: `VCS_8bit/README.md`. |
-| `VERDI_8bit/` | Planned Verdi debug flow directory for waveform viewing and simulation debug. | Planned: `VERDI_8bit/README.md`. |
-| [`DC_8bit/`](DC_8bit/) | Design Compiler synthesis flow, setup files, generated reports, and synthesis work record. | [`DC_8bit/README.md`](DC_8bit/README.md) |
-| [`ICCII_8bit/`](ICCII_8bit/) | ICC2 physical implementation scripts and report directory for design planning, placement, CTS, routing, and report extraction. | [`ICCII_8bit/README.md`](ICCII_8bit/README.md) |
-
-## VCS Simulation Flow
-
-The VCS flow is used to compile the RTL and testbench, run simulation, and generate simulation output for functional verification.
-
-Expected inputs:
+I started with the 8-bit ALU RTL and its testbench:
 
 ```text
 rtl/alu_8bit.v
 rtl/tb_alu_8bit.v
 ```
 
-Recommended future location:
+The RTL file contains the ALU design logic. The testbench is used to apply inputs, run simulation, and check how the ALU responds for different operations.
 
-```text
-VCS_8bit/
-```
+Before moving to synthesis, I first verified the RTL behavior through simulation and waveform debug.
 
-Typical VCS flow steps:
+## Step 2: VCS Simulation
 
-1. Compile `alu_8bit.v` with `tb_alu_8bit.v`.
-2. Run the generated simulation executable.
-3. Capture the simulation log.
-4. Generate waveform output if enabled by the testbench.
-5. Document pass/fail behavior and any observed mismatches.
+I used VCS to compile and run the RTL simulation.
 
-Example command template:
+Run from this folder:
 
 ```sh
-vcs -full64 -sverilog ../rtl/alu_8bit.v ../rtl/tb_alu_8bit.v -o simv
-./simv
+cd "VCS and Verdi"
 ```
 
-When the `VCS_8bit/` folder is added, place its detailed instructions in:
-
-```text
-VCS_8bit/README.md
-```
-
-## Verdi Debug Flow
-
-The Verdi flow is used to inspect simulation waveforms, debug RTL behavior, and trace signal activity across the ALU design and testbench.
-
-Expected inputs:
-
-```text
-rtl/alu_8bit.v
-rtl/tb_alu_8bit.v
-```
-
-Recommended future location:
-
-```text
-VERDI_8bit/
-```
-
-Typical Verdi flow steps:
-
-1. Generate a waveform database from the VCS simulation.
-2. Launch Verdi with the RTL, testbench, and waveform database.
-3. Add important ALU signals to the waveform window.
-4. Inspect input operands, opcode/control signals, result outputs, flags, reset behavior, and clocked register updates.
-5. Document debug observations in the Verdi flow README.
-
-Example command template:
+Compile the RTL and testbench:
 
 ```sh
-verdi -sv ../rtl/alu_8bit.v ../rtl/tb_alu_8bit.v -ssf waveform.fsdb
+vcs -full64 -sverilog -debug_access+all -kdb ./../rtl/alu_8bit.v ./../rtl/tb_alu_8bit.v -o simv_8bit
 ```
 
-When the `VERDI_8bit/` folder is added, place its detailed instructions in:
+Run the simulation:
+
+```sh
+./simv_8bit -l sim.log
+```
+
+What I check after this step:
+
+- VCS compilation completed without fatal errors.
+- Simulation ran successfully.
+- The ALU input and output behavior matched the expected testbench behavior.
+- Log files such as `vcs_compile.log` and `sim.log` were generated.
+
+After running VCS, the screenshots of the compile and simulation result here:
+
+![VCS simulation result](VCS_and_Verdi/Images/vcs_simulation_result.jpg)
+
+## Step 3: Verdi Debug
+
+After VCS simulation, I used Verdi to inspect the waveform and debug the ALU behavior visually.
+
+The simulation generates an FSDB waveform, open it with:
+
+```sh
+verdi -ssf alu_8bit_tb.fsdb &
+```
+
+Signals I check in Verdi:
+
+- `clk`
+- `rst_n`
+- `A`
+- `B`
+- `op`
+- `cin`
+- `result`
+- `cout`
+- `zero`
+- `sign`
+- `overflow`
+- `parity_out`
+
+Results from Verdi:
+
+- The testbench driving ALU inputs.
+- Output changes for each operation.
+- Reset behavior.
+- Flag behavior for carry, zero, sign, overflow, and parity.
+- The waveform proving that the RTL is working before synthesis.
+
+After opening the waveform in Verdi, the GUI screenshots here:
+
+#### Waveform of the Testbench
+
+![Verdi waveform overview](VCS_and_Verdi/Images/verdi_waveform_overview.png)
+
+#### Schematic view of the Testbench module in Verdi
+
+![Verdi ALU schematic](VCS_and_Verdi/Images/verdi_alu_schematic.png)
+
+## Step 4: Design Compiler Synthesis
+
+After RTL simulation and waveform debug, I moved to Design Compiler synthesis.
+
+The complete synthesis work is kept in:
 
 ```text
-VERDI_8bit/README.md
+DC_8bit/
 ```
 
-## Design Compiler Synthesis Flow
-
-The Design Compiler synthesis work is recorded in:
+Detailed synthesis README:
 
 ```text
 DC_8bit/README.md
 ```
 
-Use this flow to synthesize the RTL into a mapped gate-level design using `run_dc.tcl`.
-
-Main files:
+Main script:
 
 ```text
 DC_8bit/run_dc.tcl
-DC_8bit/rm_setup/common_setup.tcl
-DC_8bit/rm_setup/dc_setup.tcl
-DC_8bit/rm_setup/dc_setup_filenames.tcl
-CONSTRAINTS/alu_8bit.sdc
-rtl/alu_8bit.v
 ```
 
-README link:
+What I did in this stage:
+
+- Analyzed the RTL.
+- Elaborated the `alu_8bit` design.
+- Applied the SDC constraints.
+- Ran `compile_ultra`.
+- Generated mapped synthesis outputs.
+- Captured Design Vision schematics.
+- Collected timing, area, power, QoR, threshold voltage, and other reports.
+
+Follow the detailed synthesis work here:
+
+[`DC_8bit/README.md`](DC_8bit/README.md)
+
+## Step 5: ICC2 Physical Implementation
+
+After synthesis, the mapped netlist from Design Compiler is the starting point for ICC2.
+
+Input netlist:
 
 ```text
-DC_8bit/README.md
+DC_8bit/results/alu_8bit.mapped.v
 ```
 
-## ICC2 Physical Implementation Flow
-
-The ICC2 flow directory contains physical implementation scripts for the block-level ALU.
-
-Current script location:
+The complete ICC2 work is kept in:
 
 ```text
-ICCII_8bit/scripts/
+ICCII_8bit/
 ```
 
-Current scripts:
-
-```text
-ICCII_8bit/scripts/mmmc_script.tcl
-ICCII_8bit/scripts/design_planning.tcl
-ICCII_8bit/scripts/placement.tcl
-ICCII_8bit/scripts/cts.tcl
-ICCII_8bit/scripts/routing.tcl
-ICCII_8bit/scripts/extracting_reports.tcl
-```
-
-The ICC2 physical implementation work is recorded in:
+Detailed ICC2 README:
 
 ```text
 ICCII_8bit/README.md
 ```
 
-## Update Notes
+What I did in ICC2:
 
-When updating the folder structure later:
+- Created the ICC2 design library.
+- Imported the mapped Verilog netlist.
+- Created the floorplan.
+- Built the power plan with rings, mesh, and rails.
+- Inserted boundary and tap cells.
+- Ran placement.
+- Ran CTS.
+- Ran routing.
+- Performed DRC/LVS-related checks.
+- Added filler and metal fill.
+- Saved the final routed block.
 
-- Add new flow folders to the tree in [Folder Structure](#folder-structure).
-- Add each new folder to the [Folder Contents](#folder-contents) table.
-- Link each flow folder to its own README when available.
-- Keep this file as the high-level index and keep detailed tool instructions inside each flow-specific README.
+Follow the detailed physical implementation work here:
+
+[`ICCII_8bit/README.md`](ICCII_8bit/README.md)
+
+## Step 6: Final GDS Handoff
+
+At the end of the ICC2 flow, These files will be generated as the final design handoff files.
+
+Expected final outputs from the ICC2 extraction stage:
+
+```text
+ICCII_8bit/outputs/alu_8bit_slow.spef
+ICCII_8bit/outputs/alu_8bit_fast.spef
+ICCII_8bit/outputs/alu_8bit_typical.spef
+ICCII_8bit/outputs/alu_8bit_netlist.v
+ICCII_8bit/outputs/alu_8bit_slow.sdf
+ICCII_8bit/outputs/alu_8bit_fast.sdf
+ICCII_8bit/outputs/alu_8bit.def
+ICCII_8bit/outputs/alu_8bit_abstract.lef
+ICCII_8bit/outputs/alu_8bit_final.gds
+```
+
+The final GDS file is:
+
+```text
+ICCII_8bit/outputs/alu_8bit_final.gds
+```
+
+This is the final layout database output of the block-level physical implementation flow.
+
+## Screenshots and Results
+
+I will use screenshots to show what happened at important points in the flow. The screenshots are not meant to teach every tool command in detail; they show the actual work and GUI results from this project.
+
+Suggested screenshot list:
+
+| Stage | Screenshot |
+| --- | --- |
+| VCS compile | `VCS and Verdi/Images/vcs_compile_result.png` |
+| VCS simulation | `VCS and Verdi/Images/vcs_simulation_result.png` |
+| Verdi waveform overview | `VCS and Verdi/Images/verdi_waveform_overview.png` |
+| Verdi signal debug | `VCS and Verdi/Images/verdi_alu_signal_debug.png` |
+| Design Compiler schematic/report images | `DC_8bit/Reports/` |
+| ICC2 floorplan, power plan, placement, CTS, routing images | `ICCII_8bit/Reports/` |
+
+For the detailed DC and ICC2 screenshots and reports, refer to:
+
+- [`DC_8bit/README.md`](DC_8bit/README.md)
+- [`ICCII_8bit/README.md`](ICCII_8bit/README.md)
+
+
+[def]: VCS_and_Verdi/Images/vcs_simulation_result.jpg
