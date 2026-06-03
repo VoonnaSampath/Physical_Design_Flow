@@ -277,10 +277,9 @@ Suggested screenshot list:
 
 | Stage | Screenshot |
 | --- | --- |
-| VCS compile | `VCS and Verdi/Images/vcs_compile_result.png` |
-| VCS simulation | `VCS and Verdi/Images/vcs_simulation_result.png` |
-| Verdi waveform overview | `VCS and Verdi/Images/verdi_waveform_overview.png` |
-| Verdi signal debug | `VCS and Verdi/Images/verdi_alu_signal_debug.png` |
+| VCS simulation | `VCS_and_Verdi/Images/vcs_simulation_result.png` |
+| Verdi waveform overview | `VCS_and_Verdi/Images/verdi_waveform_overview.png` |
+| Verdi schematic view | `VCS_and_Verdi/Images/verdi_alu_schematic.png` |
 | Design Compiler schematic/report images | `DC_8bit/Reports/` |
 | ICC2 floorplan, power plan, placement, CTS, routing images | `ICCII_8bit/Reports/` |
 
