@@ -145,7 +145,7 @@ read_verilog {./../DC_8bit/results/alu_8bit.mapped.v } -library ALU_8bit_14_LIB 
 Key commands:
 
 ```tcl
-initialize_floorplan -control_type die -boundary {{0 0} {36.680 36.600}} -core_offset {5.040 5.400 5.040 5.400}
+initialize_floorplan -control_type core -core_offset 4.8 -core_utilization 0.6
 place_pins -self
 report_utilization > utilization_report_after_floorplanning.txt
 report_design > design_report_after_floorplanning.txt
@@ -157,14 +157,16 @@ save_block -as floorplan_block
 ![pre-floorplan](Reports/pre-floorplan.png)
 
 ```tcl
-initialize_floorplan -control_type die -boundary {{0 0} {36.680 36.600}} -core_offset {5.040 5.400 5.040 5.400}
+initialize_floorplan -control_type core -core_offset 4.8 -core_utilization 0.6
 place_pins -self
+report_utilization > utilization_report_after_floorplanning.txt
 ```
 
 #### Post Floorplan in GUI
 
 ![floorplan-cli](Reports/floorplan-cli.png)
 ![post-floorplan](Reports/post-floorplan.png)
+![utilization](Reports/utilization-after-floorplan.png)
 
 ## Power Planning
 
@@ -191,11 +193,49 @@ create_shape -shape_type rect -layer M7 -boundary {{0.0 15.82} {2.2 16.81}} -por
 connect_pg_net -all_blocks -automatic
 ```
 
-![pre-powerplan-cli](Reports/pre-powerplan-cli.png)
-![](Reports/.png)
+![connect-pg-automatic](Reports/connect-pg-automatic.png)
+![create-shapes-pg](Reports/create-shapes-pg.png)
 
-#### Post powerplan in GUI
+```tcl
+create_pg_ring_pattern core_ring_pattern -vertical_layer M9 -vertical_width 1 -vertical_spacing 0.8 -horizontal_layer M8 -horizontal_width 1 -horizontal_spacing 0.8
 
+set_pg_strategy core_power_ring -core -pattern { {name : core_ring_pattern} {nets : {VDD VSS}} {offset : {1 1}} }
+
+compile_pg -strategies core_power_ring
+```
+
+![pg-ring](Reports/pg-ring.png)
+
+```tcl
+create_pg_mesh_pattern core_mesh_pattern -layers { {{vertical_layer: M7}{width: 0.35} {spacing: interleaving} {pitch: 1.48} {offset: .80}} {{horizontal_layer: M8}{width: 0.4} {spacing: interleaving} {pitch: 1.16} {offset: .96}}}
+
+set_pg_strategy core_mesh -pattern { {pattern:core_mesh_pattern} {nets: VDD VSS}} -core -extension { {stop: innermost_ring} }
+
+compile_pg -strategies core_mesh
+```
+
+![pg-mesh](Reports/pg-mesh.png)
+
+```tcl
+create_pg_std_cell_conn_pattern std_cell_rail -layers {M1} -rail_width 0.1
+  
+set_pg_strategy rail_strat -core -pattern { {name: std_cell_rail} {nets: VDD VSS} }
+
+compile_pg -strategies rail_strat
+```
+
+![pg-rails](Reports/pg-rails.png)
+![pg-overall](Reports/pg-overall.png)
+
+### Post Powerplan in GUI
+
+```tcl
+create_boundary_cells -left_boundary_cell SAEDRVT14_CAPT3 -right_boundary_cell SAEDRVT14_CAPT3 -top_boundary_cells SAEDRVT14_CAPT2 -bottom_boundary_cells SAEDRVT14_CAPB3
+
+create_tap_cells -lib_cell SAEDRVT14_TAPPN -distance 13 -skip_fixed_cells
+```
+
+![post-powerplan](Reports/post-powerplan.png)
 
 ## MMMC Setup
 
@@ -235,11 +275,11 @@ set_scenario_status
 
 Captured after this stage:
 
-| Captured | What to show |
-| --- | --- |
-| `screenshots/01_mmmc/01_scenarios.png` | Scenario browser or console output showing `func_slow`, `func_fast`, and `func_typical`. |
-| `screenshots/01_mmmc/02_constraints_loaded.png` | Console output showing the SDC file was sourced. |
-| `Reports/mmmc_scenarios.png` | Optional screenshot of `report_scenarios`. |
+```tcl
+report_scenarios
+```
+
+![mmmc_scenarios](Reports/mmmc_scenarios.png)
 
 ## Placement
 

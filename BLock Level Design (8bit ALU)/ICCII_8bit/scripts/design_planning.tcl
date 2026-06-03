@@ -13,7 +13,7 @@ set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_RVT/ndm/saed14rvt_cg_frame_timing
 set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_LVT/ndm/saed14lvt_cg_frame_timing.ndm
 set_ref_libs -add ${PDK_PATH}/SAED14nm_EDK_STD_HVT/ndm/saed14hvt_cg_frame_timing.ndm
 
-read_verilog {./../DC_8bit/results/alu_8bit.mapped.v } -library ALU_8bit_14_LIB -design main -top alu_8bit
+read_verilog {./../DC_8bit/results/alu_8bit.mapped.v } -library ALU_8bit_14_LIB -top alu_8bit
 
 save_lib
 save_block
@@ -27,7 +27,7 @@ save_block -as pre_floorplan_block
 # open pre_floorplan_block
 ###############################################################################################################
 
-initialize_floorplan -control_type die -boundary {{0 0} {36.680 36.600}} -core_offset {5.040 5.400 5.040 5.400}
+initialize_floorplan -control_type core -core_offset 4.8 -core_utilization 0.6
 
 #set_individual_pin_constraints -ports [all_inputs] -sides {1 3} -pin_spacing_distance 2
 #set_individual_pin_constraints -ports [all_outputs] -sides {2 4} -pin_spacing_distance 1
