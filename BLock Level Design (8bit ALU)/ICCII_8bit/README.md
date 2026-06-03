@@ -167,6 +167,8 @@ report_utilization > utilization_report_after_floorplanning.txt
 
 Floorplan with Core + Die area and with its utilization
 ![post-floorplan](Reports/post-floorplan.png)
+
+Utilization Report
 ![utilization](Reports/utilization-after-floorplan.png)
 
 ## Power Planning
