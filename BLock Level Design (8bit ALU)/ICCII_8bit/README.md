@@ -197,6 +197,8 @@ connect_pg_net -all_blocks -automatic
 ![connect-pg-automatic](Reports/connect-pg-automatic.png)
 ![create-shapes-pg](Reports/create-shapes-pg.png)
 
+#### PG Ring
+
 ```tcl
 create_pg_ring_pattern core_ring_pattern -vertical_layer M9 -vertical_width 1 -vertical_spacing 0.8 -horizontal_layer M8 -horizontal_width 1 -horizontal_spacing 0.8
 
@@ -206,6 +208,8 @@ compile_pg -strategies core_power_ring
 ```
 
 ![pg-ring](Reports/pg-ring.png)
+
+#### PG Mesh
 
 ```tcl
 create_pg_mesh_pattern core_mesh_pattern -layers { {{vertical_layer: M7}{width: 0.35} {spacing: interleaving} {pitch: 1.48} {offset: .80}} {{horizontal_layer: M8}{width: 0.4} {spacing: interleaving} {pitch: 1.16} {offset: .96}}}
@@ -217,6 +221,8 @@ compile_pg -strategies core_mesh
 
 ![pg-mesh](Reports/pg-mesh.png)
 
+#### PG Standard Cell rails
+
 ```tcl
 create_pg_std_cell_conn_pattern std_cell_rail -layers {M1} -rail_width 0.1
   
@@ -226,6 +232,9 @@ compile_pg -strategies rail_strat
 ```
 
 ![pg-rails](Reports/pg-rails.png)
+
+#### Overall view of Power Groung Network
+
 ![pg-overall](Reports/pg-overall.png)
 
 ### Post Powerplan in GUI
@@ -342,20 +351,22 @@ utilization_report_after_placement.txt
 power_report_after_placement.txt
 ```
 
-Congestion Reports
+#### Congestion Reports
 
 ![congestion_report_after_placement](Reports/congestion_report_after_placement.png)
 
-congestion Hot Map and Histogram
+#### Congestion Hot Map and Histogram
 
 <img src="Reports/congestion-hotspot.png" width="45%"> <img src="Reports/congestion-histogram.png" width="45%">
 
 ### Post Placement Timing Report
 
-Setup slack
+#### Setup slack
+
 ![post-placement-setup](Reports/post-placement-setup.png)
 
-Hold Slack
+#### Hold Slack
+
 ![post-placement-hold](Reports/post-placement-hold.png)
 
 ## Clock Tree Synthesis
@@ -410,17 +421,17 @@ save_block -as cts_block
 
 ### Pre CTS in GUI
 
-Clock Buffer Levels
+#### Clock Buffer Levels
 
 ![pre-cts-buffers-tree](Reports/pre-cts-buffers-tree.png)
 
 ### Post CTS in GUI
 
-Clock Tree
+#### Clock Tree
 
 ![cts-tree](Reports/cts-tree.png)
 
-Clock Buffer Levels
+#### Clock Buffer Levels
 
 ![post-cts-buffers-tree](Reports/post-cts-buffers-tree.png)
 
@@ -434,10 +445,12 @@ timing_report_hold_after_cts.txt
 
 ### Post CTS Timing Report
 
-Setup slack
+#### Setup-slack
+
 ![post-cts-setup](Reports/post-cts-setup.png)
 
-Hold Slack
+#### Hold-Slack
+
 ![post-cts-hold](Reports/post-cts-hold.png)
 
 ## Routing and Signoff Checks
@@ -511,20 +524,23 @@ drc_after_fill/
 
 ### Post Routing Timing Report
 
-After std cell filler
+#### After std cell filler
+
 ![routing-after-stdcell-filler](Reports/routing-after-stdcell-filler.png)
 
-Setup slack
+#### Setup slack 
+
 ![post-routing-setup](Reports/post-routing-setup.png)
 
-Hold Slack
+#### Hold Slack 
+
 ![post-routing-hold](Reports/post-routing-hold.png)
 
-Congestion after Routing
+#### Congestion after Routing
 
 ![congestion-after-rouitng](Reports/congestion-after-rouitng.png)
 
-congestion Hot Map and Histogram
+#### congestion Hot Map and Histogram
 
 <img src="Reports/congestion-hotspot-routing.png" width="45%"> <img src="Reports/congestion-histogram-routing.png" width="45%">
 
@@ -537,13 +553,16 @@ check_routes
 check_lvs
 ```
 
-check_routes
+#### check_routes
+
 ![check_routes](Reports/check_routes.png)
 
-check_lvs
+#### check_lvs
+
 ![check_lvs](Reports/check_lvs.png)
 
-After Metal Fill
+#### After Metal Fill
+
 ![DRC-after-fill](Reports/DRC-after-fill.png)
 
 ## Final Extraction and Handoff Outputs
