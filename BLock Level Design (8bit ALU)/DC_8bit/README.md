@@ -323,4 +323,4 @@ Before closing the run documentation, confirm that:
 
 For the detailed ICC2 flow, screenshots and reports, refer to:
 
-- [`ICCII_8bit/README.md`](ICCII_8bit/README.md)
+- [`ICCII_8bit/README.md`](./../ICCII_8bit/README.md)
