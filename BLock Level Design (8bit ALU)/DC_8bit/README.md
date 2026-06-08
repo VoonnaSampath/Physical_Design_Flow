@@ -320,3 +320,7 @@ Before closing the run documentation, confirm that:
 - `reports/report-power.txt` was generated.
 - `reports/report-qor.txt` was generated.
 - `reports/report-threshold.txt` was generated.
+
+For the detailed ICC2 flow, screenshots and reports, refer to:
+
+- [`ICCII_8bit/README.md`](ICCII_8bit/README.md)

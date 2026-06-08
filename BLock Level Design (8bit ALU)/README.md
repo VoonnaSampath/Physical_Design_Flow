@@ -160,7 +160,7 @@ Results from Verdi:
 
 After opening the waveform in Verdi, the GUI screenshots here:
 
-#### Waveform of the Testbench
+### Waveform of the Testbench
 
 ![Verdi waveform overview](VCS_and_Verdi/Images/verdi_waveform_overview.png)
 
